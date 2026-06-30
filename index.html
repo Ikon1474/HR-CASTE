@@ -408,7 +408,7 @@
             </div>
             <div class="form-group">
                 <label>आवेदक का नाम</label>
-                <input type="text" id="inName" value="Mrs. SAVITA">
+                <input type="text" id="inName" value="Mr. VINOD KUMAR">
             </div>
             <div class="form-group">
                 <label>पिता का नाम</label>
@@ -418,12 +418,12 @@
                 <label>D/o या S/o चुनें</label>
                 <select id="inRelation">
                     <option value="D/o">D/o (बेटी)</option>
-                    <option value="S/o">S/o (बेटा)</option>
+                    <option value="S/o" selected>S/o (बेटा)</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>जाति / ब्लॉक (Caste)</label>
-                <input type="text" id="inCaste" value="BC-B (Jatav)">
+                <input type="text" id="inCaste" value="JOGI NATH' Caste. This caste is mentioned in the State list of BC Block 'A'">
             </div>
             <div class="form-group">
                 <label>प्रमाण-पत्र संख्या (Sr. No.)</label>
@@ -443,7 +443,7 @@
             </div>
             <div class="form-group full-width">
                 <label>पूरा आवासीय पता</label>
-                <textarea id="inAddress" rows="2">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</textarea>
+                <textarea id="inAddress" rows="2">36/18, FRIENDS COLONY GURUGRAM 122001, Town GURGAON, Tehsil GURGAON, District GURGAON</textarea>
             </div>
         </div>
         <div class="btn-group">
@@ -489,20 +489,25 @@
                 </div>
             </div>
 
-            <!-- मुख्य पैराग्राफ -->
+            <!-- मुख्य पैराग्राफ 1 -->
             <div class="cert-paragraph">
-                This is to certify that <span class="bold" id="outName1">Mrs. SAVITA</span> 
-                <span class="bold" id="outRelation">D/o</span> <span class="bold" id="outFather1">Sh. SHYAM SUNDER</span> 
-                resident of <span class="bold" id="outAddress1">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</span> 
-                of the Haryana State belongs to the <span class="bold" id="outCaste">BC-B (Jatav)</span>. 
-                and/or his family ordinarily reside(s) in <span class="bold" id="outAddress2">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</span> 
-                of the State HARYANA.
+                This is to certify that <span class="bold" id="outName1">Mr. VINOD KUMAR</span> 
+                <span class="bold" id="outRelation">S/o</span> <span class="bold" id="outFather1">Sh. SHYAM SUNDER</span> 
+                resident of <span class="bold" id="outAddress1">36/18, FRIENDS COLONY GURUGRAM 122001, Town GURGAON, Tehsil GURGAON, District GURGAON</span> 
+                of the Haryana State belongs to the <span class="bold" id="outCaste">JOGI NATH' Caste. This caste is mentioned in the State list of BC Block 'A'</span>.
             </div>
 
+            <!-- मुख्य पैराग्राफ 2 -->
+            <div class="cert-paragraph">
+                Shri <span class="bold" id="outName2">VINOD KUMAR</span> and/or his family ordinarily reside(s) in <span class="bold" id="outAddress2">36/18, FRIENDS COLONY GURUGRAM 122001 Town GURGAON of Tehsil GURGAON District GURGAON</span> of the State HARYANA.
+            </div>
+
+            <!-- मुख्य पैराग्राफ 3 -->
             <div class="cert-paragraph" style="font-size:13px;">
                 This is to certify that he does not belong to the person/section (Creamy Layer) as per State Govt letter No. 1170-SW(1)-95 dated 07-06-1995, No. 22/36/2000-3GS-III, dated 09-08-2000 &amp; No. 213-SW(1)-2010 dated 31-08-2010.
             </div>
 
+            <!-- मुख्य पैराग्राफ 4 -->
             <div class="cert-paragraph" style="font-size:13px; margin-bottom:10px;">
                 This certificate is being issued to him on the basis of verification of Patwari.
             </div>
@@ -545,19 +550,20 @@
             function updateCertificate() {
                 const cidr = document.getElementById('inCidr').value.trim() || 'HA0500121033';
                 const edisha = document.getElementById('inEdisha').value.trim() || '050261701006555';
-                const name = document.getElementById('inName').value.trim() || 'Mrs. SAVITA';
+                const name = document.getElementById('inName').value.trim() || 'Mr. VINOD KUMAR';
                 const father = document.getElementById('inFather').value.trim() || 'Sh. SHYAM SUNDER';
                 const relation = document.getElementById('inRelation').value; // D/o or S/o
-                const caste = document.getElementById('inCaste').value.trim() || 'BC-B (Jatav)';
+                const caste = document.getElementById('inCaste').value.trim() || "JOGI NATH' Caste. This caste is mentioned in the State list of BC Block 'A'";
                 const srNo = document.getElementById('inSrNo').value.trim() || 'BC/2017/433';
                 const place = document.getElementById('inPlace').value.trim() || 'GURGAON';
                 const date = document.getElementById('inDate').value.trim() || '10/04/2017';
                 const designation = document.getElementById('inDesignation').value.trim() || 'Tehsildar, Gurgaon';
-                const address = document.getElementById('inAddress').value.trim() || '1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL';
+                const address = document.getElementById('inAddress').value.trim() || '36/18, FRIENDS COLONY GURUGRAM 122001, Town GURGAON, Tehsil GURGAON, District GURGAON';
 
                 document.getElementById('outCidr').innerText = cidr;
                 document.getElementById('outEdisha').innerText = edisha;
                 document.getElementById('outName1').innerText = name;
+                document.getElementById('outName2').innerText = name.replace('Mr. ', '').replace('Mrs. ', '').trim();
                 document.getElementById('outFather1').innerText = father;
                 document.getElementById('outRelation').innerText = relation;
                 document.getElementById('outCaste').innerText = caste;
