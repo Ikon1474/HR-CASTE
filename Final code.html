@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>हरियाणा सरकार - पिछड़ा वर्ग प्रमाण-पत्र</title>
+    <!-- html2canvas library for export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* प्रिंट और स्क्रीन सेटिंग्स - फुल A4 */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e8ebf0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* डेटा एंट्री पैनल */
+        .control-panel {
+            max-width: 210mm;
+            width: 100%;
+            margin: 0 auto 25px auto;
+            background: #fff;
+            padding: 22px 26px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+        .panel-title {
+            margin-top: 0;
+            color: #e65100;
+            border-bottom: 2px solid #e65100;
+            padding-bottom: 10px;
+            font-size: 1.4rem;
+            font-family: sans-serif;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 18px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        .form-group label {
+            font-size: 12.5px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #333;
+            font-family: sans-serif;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            background: white;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 38px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+        .btn {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #e65100;
+            color: white;
+            font-family: sans-serif;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        .btn:hover { background-color: #bf360c; }
+        .btn-export {
+            background-color: #0d7c3f;
+        }
+        .btn-export:hover { background-color: #0a5f30; }
+        .btn-export-png {
+            background-color: #c05a0e;
+        }
+        .btn-export-png:hover { background-color: #9e480b; }
+
+        /* A4 सर्टिफिकेट - फुल साइज 210mm x 297mm */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 16mm 18mm;
+            background: #ffffff;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 0 25px rgba(0,0,0,0.18);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* बैकग्राउंड इमेज लेयर */
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .background-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            display: block;
+        }
+
+        /* कंटेंट कंटेनर - हमेशा इमेज के ऊपर */
+        .content-container {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+
+        /* टॉप आईडी बार */
+        .top-id-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .id-box {
+            border: 1px solid #000;
+            padding: 3px 10px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        /* हेडर - लोगो 110px */
+        .govt-header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .emblem-wrapper {
+            height: 110px;  /* 90px से बढ़ाकर 110px */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+        .emblem-wrapper img {
+            height: 100%;
+            width: auto;
+            max-width: 140px; /* चौड़ाई भी बढ़ाई ताकि अनुपात सही रहे */
+            object-fit: contain;
+        }
+        /* डिफ़ॉल्ट प्लेसहोल्डर */
+        .emblem-placeholder-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #d84315;
+            border: 1.5px dashed #d84315;
+            padding: 8px 18px;
+            background: #fff5f0;
+        }
+        .govt-title-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d84315;
+            letter-spacing: 0.5px;
+        }
+        .govt-sub-text {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1a237e;
+            margin-top: 2px;
+        }
+        
+        .certificate-banner {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a237e;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        /* फोटो सेक्शन - दायीं ओर */
+        .meta-middle-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+        .photo-box {
+            width: 95px;
+            height: 115px;
+            border: 1.5px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+        }
+        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .placeholder-text { font-size: 10px; color: #555; text-align: center; font-weight: bold; }
+
+        /* मुख्य पैराग्राफ */
+        .cert-paragraph {
+            font-size: 14px;
+            line-height: 1.9;
+            text-align: justify;
+            margin-bottom: 14px;
+            color: #000;
+        }
+        .bold { font-weight: bold; }
+
+        /* फुटर सेक्शन - बायीं ओर सर्टिफिकेट मेटा, दायीं ओर हस्ताक्षर */
+        .footer-section {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+        
+        /* बायाँ भाग - सर्टिफिकेट नंबर, स्थान, दिनांक - सभी बोल्ड */
+        .certificate-meta {
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .certificate-meta .label {
+            font-weight: bold;
+            color: #000;
+        }
+        .certificate-meta .value {
+            font-weight: bold;
+        }
+        
+        /* दायाँ भाग - हस्ताक्षर */
+        .issuer-signature-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: right;
+        }
+        .signature-image-box {
+            width: 150px;
+            height: 55px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            margin-bottom: 3px;
+            overflow: hidden;
+        }
+        .signature-image-box img { width: 100%; height: 100%; object-fit: contain; }
+        .sign-placeholder {
+            font-size: 10px;
+            color: #777;
+            font-weight: normal;
+        }
+
+        /* निचला सत्यापन टेक्स्ट - QR के साथ */
+        .bottom-verification-bar {
+            margin-top: 16px;
+            border-top: 1.5px solid #000;
+            padding-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .qr-wrapper {
+            width: 80px;
+            height: 80px;
+            border: 1.5px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+        
+        .verification-text {
+            font-size: 10.5px;
+            line-height: 1.5;
+            color: #222;
+            flex: 1;
+            font-style: italic;
+        }
+        .verification-text .bold { 
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* प्रिंट में कंट्रोल पैनल छुपाएँ */
+        @media print {
+            .control-panel {
+                display: none !important;
+            }
+            body {
+                background: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .page {
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                padding: 16mm 18mm !important;
+            }
+            img, .page, .background-container, .content-container {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        /* छोटे स्क्रीन के लिए */
+        @media screen and (max-width: 700px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .control-panel { padding: 14px; }
+            .btn-group { flex-direction: column; }
+            .btn { min-width: unset; }
+            .footer-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .issuer-signature-section {
+                align-items: flex-start;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- कंट्रोल पैनल -->
+    <div class="control-panel">
+        <h2 class="panel-title">📋 हरियाणा BC प्रमाण-पत्र - लाइव एडिटर</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>🖼️ बैकग्राउंड अपलोड करें</label>
+                <input type="file" id="bgUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>🪪 अशोक स्तंभ / लोगो अपलोड करें (बड़ा)</label>
+                <input type="file" id="emblemUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>📱 QR कोड अपलोड करें</label>
+                <input type="file" id="qrUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>📸 आवेदक का फोटो अपलोड करें</label>
+                <input type="file" id="photoUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>✍️ हस्ताक्षर (Signature) अपलोड करें</label>
+                <input type="file" id="signUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>CIDR Id</label>
+                <input type="text" id="inCidr" value="HA0500121033">
+            </div>
+            <div class="form-group">
+                <label>eDisha Id</label>
+                <input type="text" id="inEdisha" value="050261701006555">
+            </div>
+            <div class="form-group">
+                <label>आवेदक का नाम</label>
+                <input type="text" id="inName" value="Mrs. SAVITA">
+            </div>
+            <div class="form-group">
+                <label>पिता का नाम</label>
+                <input type="text" id="inFather" value="Sh. SHYAM SUNDER">
+            </div>
+            <div class="form-group">
+                <label>D/o या S/o चुनें</label>
+                <select id="inRelation">
+                    <option value="D/o">D/o (बेटी)</option>
+                    <option value="S/o">S/o (बेटा)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>जाति / ब्लॉक (Caste)</label>
+                <input type="text" id="inCaste" value="BC-B (Jatav)">
+            </div>
+            <div class="form-group">
+                <label>प्रमाण-पत्र संख्या (Sr. No.)</label>
+                <input type="text" id="inSrNo" value="BC/2017/433">
+            </div>
+            <div class="form-group">
+                <label>जारी करने का स्थान (Place)</label>
+                <input type="text" id="inPlace" value="GURGAON">
+            </div>
+            <div class="form-group">
+                <label>जारी करने की दिनांक (Date)</label>
+                <input type="text" id="inDate" value="10/04/2017">
+            </div>
+            <div class="form-group">
+                <label>हस्ताक्षर पद (Designation)</label>
+                <input type="text" id="inDesignation" value="Tehsildar, Gurgaon">
+            </div>
+            <div class="form-group full-width">
+                <label>पूरा आवासीय पता</label>
+                <textarea id="inAddress" rows="2">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</textarea>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn" id="printBtn">🖨️ प्रिंट / PDF</button>
+            <button class="btn btn-export" id="exportJpgBtn">🖼️ JPG डाउनलोड</button>
+            <button class="btn btn-export-png" id="exportPngBtn">📸 PNG डाउनलोड</button>
+        </div>
+    </div>
+
+    <!-- सर्टिफिकेट पेज - फुल A4 -->
+    <div class="page" id="printArea">
+        <!-- बैकग्राउंड -->
+        <div class="background-container">
+            <img id="bgView" src="" alt="" style="display: none;">
+        </div>
+
+        <!-- कंटेंट -->
+        <div class="content-container">
+            <!-- टॉप ID बार -->
+            <div class="top-id-bar">
+                <span class="id-box">CIDR Id: <span id="outCidr">HA0500121033</span></span>
+                <span class="id-box">eDisha Id: <span id="outEdisha">050261701006555</span></span>
+            </div>
+
+            <!-- हेडर - लोगो 110px -->
+            <div class="govt-header">
+                <div class="emblem-wrapper">
+                    <img id="emblemView" src="" alt="Emblem" style="display: none; height:100%;">
+                    <span id="emblemText" class="emblem-placeholder-text">अशोक स्तंभ / लोगो</span>
+                </div>
+                <div class="govt-title-text">Haryana Government</div>
+                <div class="govt-sub-text">पिछड़ा वर्ग प्रमाण-पत्र / Backward Class Certificate</div>
+            </div>
+
+            <!-- सर्टिफिकेट बैनर -->
+            <div class="certificate-banner">Backward Class Certificate</div>
+
+            <!-- फोटो - दायीं ओर -->
+            <div class="meta-middle-section">
+                <div class="photo-box">
+                    <img id="photoView" src="" alt="Photo" style="display: none; width:100%; height:100%;">
+                    <span id="photoText" class="placeholder-text">APPLICANT<br>PHOTO</span>
+                </div>
+            </div>
+
+            <!-- मुख्य पैराग्राफ -->
+            <div class="cert-paragraph">
+                This is to certify that <span class="bold" id="outName1">Mrs. SAVITA</span> 
+                <span class="bold" id="outRelation">D/o</span> <span class="bold" id="outFather1">Sh. SHYAM SUNDER</span> 
+                resident of <span class="bold" id="outAddress1">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</span> 
+                of the Haryana State belongs to the <span class="bold" id="outCaste">BC-B (Jatav)</span>. 
+                and/or his family ordinarily reside(s) in <span class="bold" id="outAddress2">1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL</span> 
+                of the State HARYANA.
+            </div>
+
+            <div class="cert-paragraph" style="font-size:13px;">
+                This is to certify that he does not belong to the person/section (Creamy Layer) as per State Govt letter No. 1170-SW(1)-95 dated 07-06-1995, No. 22/36/2000-3GS-III, dated 09-08-2000 &amp; No. 213-SW(1)-2010 dated 31-08-2010.
+            </div>
+
+            <div class="cert-paragraph" style="font-size:13px; margin-bottom:10px;">
+                This certificate is being issued to him on the basis of verification of Patwari.
+            </div>
+
+            <!-- फुटर सेक्शन: बायीं ओर मेटा, दायीं ओर हस्ताक्षर -->
+            <div class="footer-section">
+                <div class="certificate-meta">
+                    <div><span class="label">Sr. No.:</span> <span class="value" id="outSrNo">BC/2017/433</span></div>
+                    <div><span class="label">Place:</span> <span class="value" id="outPlace">GURGAON</span></div>
+                    <div><span class="label">Date:</span> <span class="value" id="outDate">10/04/2017</span></div>
+                </div>
+                
+                <div class="issuer-signature-section">
+                    <div class="signature-image-box">
+                        <img id="signView" src="" alt="Signature" style="display: none; width:100%; height:100%;">
+                        <span id="signText" class="sign-placeholder">(हस्ताक्षर अपलोड करें)</span>
+                    </div>
+                    <div style="font-weight:bold; font-size:13px;">Issued by:</div>
+                    <div style="font-weight:bold; font-size:13px;" id="outDesignation">Tehsildar, Gurgaon</div>
+                    <div style="font-size:11px; margin-top:2px;">SIGNATURE / STAMP</div>
+                </div>
+            </div>
+
+            <!-- निचला भाग - QR कोड + सत्यापन टेक्स्ट -->
+            <div class="bottom-verification-bar">
+                <div class="qr-wrapper">
+                    <img id="qrView" src="" alt="QR" style="display: none; width:100%; height:100%;">
+                    <span id="qrText" class="placeholder-text" style="font-size:9px;">QR CODE</span>
+                </div>
+                <div class="verification-text">
+                    This certificate is electronically generated and authenticity of this certificate can be verified from <span class="bold">http://edisha.gov.in</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // सभी आउटपुट एलिमेंट्स को अपडेट करेगा
+            function updateCertificate() {
+                const cidr = document.getElementById('inCidr').value.trim() || 'HA0500121033';
+                const edisha = document.getElementById('inEdisha').value.trim() || '050261701006555';
+                const name = document.getElementById('inName').value.trim() || 'Mrs. SAVITA';
+                const father = document.getElementById('inFather').value.trim() || 'Sh. SHYAM SUNDER';
+                const relation = document.getElementById('inRelation').value; // D/o or S/o
+                const caste = document.getElementById('inCaste').value.trim() || 'BC-B (Jatav)';
+                const srNo = document.getElementById('inSrNo').value.trim() || 'BC/2017/433';
+                const place = document.getElementById('inPlace').value.trim() || 'GURGAON';
+                const date = document.getElementById('inDate').value.trim() || '10/04/2017';
+                const designation = document.getElementById('inDesignation').value.trim() || 'Tehsildar, Gurgaon';
+                const address = document.getElementById('inAddress').value.trim() || '1076 NILOKHERI, SAGA (58), KARNAL, KARNAL, HARYANA, 132001, Town KARNAL, Tehsil KARNAL, District KARNAL';
+
+                document.getElementById('outCidr').innerText = cidr;
+                document.getElementById('outEdisha').innerText = edisha;
+                document.getElementById('outName1').innerText = name;
+                document.getElementById('outFather1').innerText = father;
+                document.getElementById('outRelation').innerText = relation;
+                document.getElementById('outCaste').innerText = caste;
+                document.getElementById('outSrNo').innerText = srNo;
+                document.getElementById('outPlace').innerText = place;
+                document.getElementById('outDate').innerText = date;
+                document.getElementById('outDesignation').innerText = designation;
+                document.getElementById('outAddress1').innerText = address;
+                document.getElementById('outAddress2').innerText = address;
+            }
+
+            // इमेज अपलोडर फ़ंक्शन
+            function setupImageReader(inputId, viewId, textId) {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            const imgView = document.getElementById(viewId);
+                            if (imgView) {
+                                imgView.src = ev.target.result;
+                                imgView.style.display = 'block';
+                            }
+                            if (textId) {
+                                const textEl = document.getElementById(textId);
+                                if (textEl) textEl.style.display = 'none';
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // सभी इमेज अपलोडर्स सेट करें
+            setupImageReader('bgUpload', 'bgView');
+            setupImageReader('emblemUpload', 'emblemView', 'emblemText');
+            setupImageReader('qrUpload', 'qrView', 'qrText');
+            setupImageReader('photoUpload', 'photoView', 'photoText');
+            setupImageReader('signUpload', 'signView', 'signText');
+
+            // सभी टेक्स्ट इनपुट्स और सेलेक्ट पर लाइव अपडेट
+            const inputs = document.querySelectorAll('.control-panel input, .control-panel textarea, .control-panel select');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateCertificate);
+                input.addEventListener('change', updateCertificate); // for select
+            });
+
+            // प्रिंट बटन
+            document.getElementById('printBtn').addEventListener('click', function() {
+                window.print();
+            });
+
+            // Export function - JPG/PNG
+            function exportCertificate(format) {
+                const element = document.getElementById('printArea');
+                html2canvas(element, {
+                    scale: 2.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: 794,
+                    height: 1123,
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+                    const ext = format === 'png' ? 'png' : 'jpg';
+                    link.download = `haryana_bc_certificate.${ext}`;
+                    link.href = canvas.toDataURL(mimeType, 0.95);
+                    link.click();
+                }).catch(err => {
+                    alert('Export error: ' + err.message);
+                    console.error(err);
+                });
+            }
+
+            // JPG Export
+            document.getElementById('exportJpgBtn').addEventListener('click', function() {
+                exportCertificate('jpg');
+            });
+
+            // PNG Export
+            document.getElementById('exportPngBtn').addEventListener('click', function() {
+                exportCertificate('png');
+            });
+
+            // पेज लोड पर डिफ़ॉल्ट
+            window.addEventListener('load', function() {
+                updateCertificate();
+                // अगर कोई इमेज सेट नहीं तो छुपा रखें
+                const bg = document.getElementById('bgView');
+                if (!bg.src || bg.src === '') bg.style.display = 'none';
+                const qr = document.getElementById('qrView');
+                if (!qr.src || qr.src === '') {
+                    qr.style.display = 'none';
+                    document.getElementById('qrText').style.display = 'block';
+                }
+                const photo = document.getElementById('photoView');
+                if (!photo.src || photo.src === '') {
+                    photo.style.display = 'none';
+                    document.getElementById('photoText').style.display = 'block';
+                }
+                const emblem = document.getElementById('emblemView');
+                if (!emblem.src || emblem.src === '') {
+                    emblem.style.display = 'none';
+                    document.getElementById('emblemText').style.display = 'block';
+                }
+                const sign = document.getElementById('signView');
+                if (!sign.src || sign.src === '') {
+                    sign.style.display = 'none';
+                    document.getElementById('signText').style.display = 'inline';
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
